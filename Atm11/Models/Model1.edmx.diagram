@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6712d32160f247a7a8d7791e65c671f6" Name="Diagram1" >
+        <EntityTypeShape EntityType="Model1.Deposit" Width="1.5" PointX="5.5" PointY="2.5" />
+        <EntityTypeShape EntityType="Model1.Withdraw" Width="1.5" PointX="9" PointY="3.625" />
+        <EntityTypeShape EntityType="Model1.AccTRype" Width="1.5" PointX="2.375" PointY="1.625" />
+        <EntityTypeShape EntityType="Model1.bankAccs" Width="1.5" PointX="2.875" PointY="4.125" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

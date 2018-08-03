@@ -1,0 +1,222 @@
+﻿
+@model Atm11.AtmAccount
+@{
+    ViewBag.Title = "Manageaccount";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#txtdw").prop('disabled', false);
+
+        //CLICK EVENT FOR THE DEPOSIT 
+        $("#btndeposit").click(function () {
+
+            var currentbl = $("#accountbl").val();
+            var acctypeid = $("#acctypeId").val();
+            var damount = $("#txtdw").val();
+            var atmid = $("#atmid").val();
+            var accno = $("#accno").val();
+            if(damount>0)
+            {
+                
+                $.ajax({
+
+                    type: "post",
+                    url: "/AtmAccount/GetDeposit",
+                    data: { cbal: currentbl, amount: damount, ano: accno, aid: atmid, atypeid: acctypeid },
+                    success:function(data)
+                    {
+                        
+                        alert(data);
+
+                        window.location.href = "/atmaccount/Manageaccount/"+atmid;
+                    }
+
+
+                });
+
+            }
+            else
+            {
+                
+                alert("Deposit amount must be greater than 0.");
+            }
+
+        });
+
+
+        ////--------------------------------------------------------------------------------------------------------------////
+        ///Trying to redirect to currency page
+        @*$("#forCurrencies").click(function () {
+            alert("Go to Currency page!!!!")
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCurrWithDraw", "AtmAccount")',
+            data: { id: $("#atmid").val() },
+            success: function (data) {
+                window.location.href = '@Url.Action("GetCurrWithDraw", "AtmAccount")';
+            }
+            
+        });
+
+        });*@
+
+        
+
+        
+
+
+        //CLICK EVENT FOR THE WITHDRAWL 
+        $("#btnwithdraw").click(function () {
+
+
+            //DECLARING AND ASSIGNING VARIABLES
+            var currentbl = $("#accountbl").val();
+            var acctypeid = $("#acctypeId").val();
+            var Wamount = $("#txtdw").val();
+            var atmid = $("#atmid").val();
+            var accno = $("#accno").val();
+            var ConCurrency = $("#drpCurrencyList").val();
+            //CHECKING THE AMOUNT IS GREATER THAN ZERO
+            if (Wamount > 0)
+            {
+
+                $.ajax({
+
+                    type: "post",
+                    //CALLING THE WITHDRAW FUNCTION
+                    url: "/AtmAccount/GetWithDraw",
+                    //PARAMETERS TO BE PASSED OVER 
+                    data: { cbal: currentbl, amount: Wamount, ano: accno, aid: atmid, atypeid: acctypeid, currency: ConCurrency },
+                    success: function (data) {
+
+                        alert(data);
+                       
+
+                        window.location.href = "/atmaccount/Manageaccount/" + atmid;
+                    }
+
+
+                });
+
+
+
+
+            }
+            else
+            {
+                alert("Withdraw amount must be greater than 0.");
+
+                }
+
+
+
+        });
+
+        ////--------------------------------------------------------------------------------------------------------------////
+
+
+
+        //CLICK EVENT FOR THE FAST £100 WITHDRAWL  
+        $("#btnfastwithdraw").click(function () {
+
+            $("#txtdw").attr("disabled", "disabled");
+         
+           
+
+            
+            var currentbl = $("#accountbl").val();
+            var acctypeid = $("#acctypeId").val();
+            var Wamount = 100;
+            var atmid = $("#atmid").val();
+            var accno = $("#accno").val();
+            if (Wamount > 0) {
+
+                $.ajax({
+
+                    type: "post",
+                    url: "/AtmAccount/GetWithDraw",
+                    data: { cbal: currentbl, amount: Wamount, ano: accno, aid: atmid, atypeid: acctypeid },
+                    success: function (data) {
+
+                        alert(data);
+                        
+
+                        window.location.href = "/atmaccount/Manageaccount/" + atmid;
+                    }
+
+
+                });
+
+
+
+
+            }
+            else {
+                alert("Withdraw amount must be greater than 0.");
+
+            }
+
+
+                
+
+
+        });
+
+    });
+
+</script>
+
+
+<h2>Manage account</h2>
+
+<div class="form-horizontal" action="">
+
+    
+
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="accno">Account No:</label>
+        <div class="col-sm-10">
+            <input type="hidden" id="atmid" value="@Model.atmaccId" />
+            <input type="hidden" id="acctypeId" value="@Model.AccTypeId" />
+            <input type="text" class="form-control" id="accno" readonly value="@Model.AccountNumber">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="bl">Balance:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="accountbl" readonly value="@Model.AccountBalance">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="bl">Deposit/Withdraw:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="txtdw" >
+        </div>
+    </div>
+
+    &nbsp&nbsp&nbsp&nbsp
+   
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="button" id="btndeposit" class="btn btn-default">Deposit</button>
+            <button type="button" id="btnwithdraw" class="btn btn-default">Withdraw</button>
+            <button type="button" id="btnfastwithdraw" class="btn btn-default">Fast Withdraw</button>
+            
+            
+             @Html.ActionLink("Withdraw Cash in A Foreign Currency", "GetCurrWithDraw", new { id = @Model.atmaccId,  })
+
+            
+       
+        </div> 
+        
+        
+
+    </div>
+</div> 
+

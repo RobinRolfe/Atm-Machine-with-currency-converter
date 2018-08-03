@@ -1,0 +1,47 @@
+﻿@model IEnumerable<AtmAccount>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountBalance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountNumber)
+        </th>
+        <th>
+             @Html.DisplayNameFor(model => model.AccType)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountBalance   )
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccType)
+        </td>
+
+        <td>
+            @*@Html.ActionLink("Manage", "ViewAccounts", new { id = item. })*@
+           
+        </td>
+    </tr>
+}
+
+</table>
+
+
+

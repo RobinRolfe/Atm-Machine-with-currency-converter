@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Atm11.AtmAccount>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>My Accounts</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountBalance)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.AccType.AccountType)
+        </th>
+        <th>
+            Action
+
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountBalance)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.AccType.AccountType)
+        </td>
+        <td>
+            @Html.ActionLink("Manage Account", "Manageaccount", new { id = item.atmaccId })
+
+        </td>
+        
+        @*<td>
+            @Html.ActionLink("Withdraw foreign currency", "GetCurrWithDraw", new { id = item.atmaccId }))
+           
+        </td>*@
+    </tr>
+}
+
+</table>
+
+
+

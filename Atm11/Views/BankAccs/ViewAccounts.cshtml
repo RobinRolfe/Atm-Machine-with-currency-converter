@@ -1,0 +1,100 @@
+﻿@model Atm11.ViewModels.CurrentAccVm
+{
+    ViewBag.Title = "ViewAccounts";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        alert("hello");
+
+        $("#btnDeposite").click(function () {
+        
+            var amount = $("#amount").val();
+            if(amount<=0)
+            {
+                alert("Amount should be greater than 0...");
+            }
+            else
+            {
+                //process amount 
+                //call server method using Ajax call 
+                $.ajax({
+
+                    type: "get",
+                    url: "/BankAccs/GetDeposite",
+                    data: {am:amount},
+                    success:function(Response)
+                    {
+                        alert(Response);
+                    }
+
+
+                });
+
+
+            }
+           
+
+        });
+
+
+    });
+
+</script>
+
+<h2>@Model.UserName's account details</h2>
+
+@using (Html.BeginForm())
+{ 
+<table class="table">
+    <tr>
+        
+        <th>
+            Account type
+        </th>
+        <th>
+            Balance
+        </th>
+
+    </tr>
+
+
+    
+    @foreach (var item in Model.BankAccList)
+    {
+        <tr>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.AccType.AccountType)
+            </td>
+
+            <td>
+                @Html.DisplayFor(Model => item.Balance)
+            </td>
+            
+            <td>@*TRYING TO DEPOSIT HERE*@
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.amount) 
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.amount)
+                </div>  
+
+                <div>
+                    <input type="button" id="btnDeposite" value="Deposit" class="btn btn-default" />
+                </div> 
+                <div>
+                    <input type="button" id="btnWithdraw" value="Withdraw" class="btn btn-default" />
+                </div> 
+            </td>
+            
+        </tr>
+        }
+</table>
+
+ }
+
+
+

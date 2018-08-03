@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table cellpadding="2" cellspacing="2" border="1">
+    <tr>
+        <th>Currency_Id</th>
+        <th>Currency_Country</th>
+        <th>Currency_Name</th>
+        <th>Conversion_Rate</th>
+        
+    </tr>
+    @foreach (var Currency in ViewBag.listCurrencies)
+    {
+
+        <tr>
+            <td>@Currency.Id</td>
+            <td>@Currency.Currency_Country_</td>
+            <td>@Currency.Currency_Name</td>
+            <td>@Currency.Conversion_Rate</td>
+        </tr>
+    }
+</table>

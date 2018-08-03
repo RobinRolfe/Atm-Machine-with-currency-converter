@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BankdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AccTypes">
+          <Key>
+            <PropertyRef Name="acctypeId" />
+          </Key>
+          <Property Name="acctypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountType" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AtmAccount">
+          <Key>
+            <PropertyRef Name="atmaccId" />
+          </Key>
+          <Property Name="atmaccId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountNumber" Type="char" MaxLength="10" />
+          <Property Name="AccountBalance" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="AccTypeId" Type="int" Nullable="false" />
+          <Property Name="AccUserId" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transactions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransAmount" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="TransDate" Type="datetime" Nullable="false" />
+          <Property Name="TranstypeId" Type="int" Nullable="false" />
+          <Property Name="atmaccId" Type="int" Nullable="false" />
+          <Property Name="TransState" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="TransType">
+          <Key>
+            <PropertyRef Name="TranstypeId" />
+          </Key>
+          <Property Name="TranstypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransType" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AccTypeBankAcc">
+          <End Role="AccTypes" Type="Self.AccTypes" Multiplicity="1" />
+          <End Role="AtmAccount" Type="Self.AtmAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypes">
+              <PropertyRef Name="acctypeId" />
+            </Principal>
+            <Dependent Role="AtmAccount">
+              <PropertyRef Name="AccTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankAccDeposit">
+          <End Role="AtmAccount" Type="Self.AtmAccount" Multiplicity="1" />
+          <End Role="Transactions" Type="Self.Transactions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AtmAccount">
+              <PropertyRef Name="atmaccId" />
+            </Principal>
+            <Dependent Role="Transactions">
+              <PropertyRef Name="atmaccId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="GetAllTranaction1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userid" Type="varchar" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getAllTransaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="aid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetcustomdateTransaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="date1" Type="varchar" Mode="In" />
+          <Parameter Name="date2" Type="varchar" Mode="In" />
+          <Parameter Name="userid" Type="varchar" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetLastFourWeekTransaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userid" Type="varchar" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetLastMonthTransaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userid" Type="varchar" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetLasttwoWeekTransaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userid" Type="varchar" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetLastWeekTransaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userid" Type="varchar" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="BankdbModelStoreContainer">
+          <EntitySet Name="AccTypes" EntityType="Self.AccTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AtmAccount" EntityType="Self.AtmAccount" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TransType" EntityType="Self.TransType" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AccTypeBankAcc" Association="Self.FK_AccTypeBankAcc">
+            <End Role="AccTypes" EntitySet="AccTypes" />
+            <End Role="AtmAccount" EntitySet="AtmAccount" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankAccDeposit" Association="Self.FK_BankAccDeposit">
+            <End Role="AtmAccount" EntitySet="AtmAccount" />
+            <End Role="Transactions" EntitySet="Transactions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BankdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AccType">
+          <Key>
+            <PropertyRef Name="acctypeId" />
+          </Key>
+          <Property Name="acctypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AtmAccounts" Relationship="Self.FK_AccTypeBankAcc" FromRole="AccTypes" ToRole="AtmAccount" />
+        </EntityType>
+        <EntityType Name="AtmAccount">
+          <Key>
+            <PropertyRef Name="atmaccId" />
+          </Key>
+          <Property Name="atmaccId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountNumber" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="AccountBalance" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="AccTypeId" Type="Int32" Nullable="false" />
+          <Property Name="AccUserId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AccType" Relationship="Self.FK_AccTypeBankAcc" FromRole="AtmAccount" ToRole="AccTypes" />
+          <NavigationProperty Name="Transactions" Relationship="Self.FK_BankAccDeposit" FromRole="AtmAccount" ToRole="Transactions" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransAmount" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="TransDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TranstypeId" Type="Int32" Nullable="false" />
+          <Property Name="atmaccId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AtmAccount" Relationship="Self.FK_BankAccDeposit" FromRole="Transactions" ToRole="AtmAccount" />
+          <Property Name="TransState" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="TransType">
+          <Key>
+            <PropertyRef Name="TranstypeId" />
+          </Key>
+          <Property Name="TranstypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransType1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AccTypeBankAcc">
+          <End Role="AccTypes" Type="Self.AccType" Multiplicity="1" />
+          <End Role="AtmAccount" Type="Self.AtmAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccTypes">
+              <PropertyRef Name="acctypeId" />
+            </Principal>
+            <Dependent Role="AtmAccount">
+              <PropertyRef Name="AccTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankAccDeposit">
+          <End Role="AtmAccount" Type="Self.AtmAccount" Multiplicity="1" />
+          <End Role="Transactions" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AtmAccount">
+              <PropertyRef Name="atmaccId" />
+            </Principal>
+            <Dependent Role="Transactions">
+              <PropertyRef Name="atmaccId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BankdbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AccTypes" EntityType="Self.AccType" />
+          <EntitySet Name="AtmAccounts" EntityType="Self.AtmAccount" />
+          <EntitySet Name="Transactions" EntityType="Self.Transaction" />
+          <EntitySet Name="TransTypes" EntityType="Self.TransType" />
+          <AssociationSet Name="FK_AccTypeBankAcc" Association="Self.FK_AccTypeBankAcc">
+            <End Role="AccTypes" EntitySet="AccTypes" />
+            <End Role="AtmAccount" EntitySet="AtmAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankAccDeposit" Association="Self.FK_BankAccDeposit">
+            <End Role="AtmAccount" EntitySet="AtmAccounts" />
+            <End Role="Transactions" EntitySet="Transactions" />
+          </AssociationSet>
+          <FunctionImport Name="GetLastWeekTransaction" ReturnType="Collection(BankdbModel.GetLastWeekTransaction_Result)">
+            <Parameter Name="userid" Mode="In" Type="String" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetLasttwoWeekTransaction" ReturnType="Collection(BankdbModel.GetLasttwoWeekTransaction_Result)">
+            <Parameter Name="userid" Mode="In" Type="String" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetLastMonthTransaction" ReturnType="Collection(BankdbModel.GetLastMonthTransaction_Result)">
+            <Parameter Name="userid" Mode="In" Type="String" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetcustomdateTransaction" ReturnType="Collection(BankdbModel.GetcustomdateTransaction_Result)">
+            <Parameter Name="date1" Mode="In" Type="String" />
+            <Parameter Name="date2" Mode="In" Type="String" />
+            <Parameter Name="userid" Mode="In" Type="String" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetLastFourWeekTransaction" ReturnType="Collection(BankdbModel.GetLastFourWeekTransaction_Result)">
+            <Parameter Name="userid" Mode="In" Type="String" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getAllTransactions" ReturnType="Collection(BankdbModel.getAllTransactions_Result)">
+            <Parameter Name="aid" Mode="In" Type="Int32" />
+            <Parameter Name="uid" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getAllTransaction" ReturnType="Collection(BankdbModel.getAllTransaction_Result)" >
+          <Parameter Name="aid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetAllTranaction1" ReturnType="Collection(BankdbModel.GetAllTranaction1_Result)">
+            <Parameter Name="userid" Mode="In" Type="String" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="GetLastWeekTransaction_Result">
+          <Property Type="String" Name="AccountNumber" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="AccountBalance" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TransType" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="TransDate" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="TransAmount" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TransState" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="AccountType" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetLasttwoWeekTransaction_Result">
+          <Property Type="String" Name="AccountNumber" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="AccountBalance" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TransType" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="TransDate" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="TransAmount" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TransState" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="AccountType" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetLastMonthTransaction_Result">
+          <Property Type="String" Name="AccountNumber" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="AccountBalance" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TransType" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="TransDate" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="TransAmount" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TransState" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="AccountType" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetcustomdateTransaction_Result">
+          <Property Type="String" Name="AccountNumber" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="AccountBalance" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TransType" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="TransDate" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="TransAmount" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TransState" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="AccountType" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetLastFourWeekTransaction_Result">
+          <Property Type="String" Name="AccountNumber" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="AccountBalance" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TransType" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="TransDate" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="TransAmount" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TransState" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="AccountType" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="getAllTransactions_Result">
+          <Property Type="Int32" Name="atmaccId" Nullable="false" />
+          <Property Type="String" Name="AccountNumber" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="AccountBalance" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Int32" Name="AccTypeId" Nullable="false" />
+          <Property Type="String" Name="AccUserId" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Decimal" Name="TransAmount" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="DateTime" Name="TransDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="TranstypeId" Nullable="false" />
+          <Property Type="Int32" Name="atmaccId1" Nullable="false" />
+          <Property Type="String" Name="TransState" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="TranstypeId1" Nullable="false" />
+          <Property Type="String" Name="TransType" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="acctypeId1" Nullable="false" />
+          <Property Type="String" Name="AccountType" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="getAllTransaction_Result">
+          <Property Type="Int32" Name="atmaccId" Nullable="false" />
+          <Property Type="String" Name="AccountNumber" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="AccountBalance" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Int32" Name="AccTypeId" Nullable="false" />
+          <Property Type="String" Name="AccUserId" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GetAllTranaction1_Result">
+          <Property Type="String" Name="AccountNumber" Nullable="true" MaxLength="10" />
+          <Property Type="Decimal" Name="AccountBalance" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TransType" Nullable="false" MaxLength="100" />
+          <Property Type="DateTime" Name="TransDate" Nullable="false" Precision="23" />
+          <Property Type="Decimal" Name="TransAmount" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="String" Name="TransState" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="AccountType" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BankdbModelStoreContainer" CdmEntityContainer="BankdbEntities">
+          <EntitySetMapping Name="AccTypes">
+            <EntityTypeMapping TypeName="BankdbModel.AccType">
+              <MappingFragment StoreEntitySet="AccTypes">
+                <ScalarProperty Name="acctypeId" ColumnName="acctypeId" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AtmAccounts">
+            <EntityTypeMapping TypeName="BankdbModel.AtmAccount">
+              <MappingFragment StoreEntitySet="AtmAccount">
+                <ScalarProperty Name="atmaccId" ColumnName="atmaccId" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountBalance" ColumnName="AccountBalance" />
+                <ScalarProperty Name="AccTypeId" ColumnName="AccTypeId" />
+                <ScalarProperty Name="AccUserId" ColumnName="AccUserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transactions">
+            <EntityTypeMapping TypeName="BankdbModel.Transaction">
+              <MappingFragment StoreEntitySet="Transactions">
+                <ScalarProperty Name="TransState" ColumnName="TransState" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TransAmount" ColumnName="TransAmount" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="TranstypeId" ColumnName="TranstypeId" />
+                <ScalarProperty Name="atmaccId" ColumnName="atmaccId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TransTypes">
+            <EntityTypeMapping TypeName="BankdbModel.TransType">
+              <MappingFragment StoreEntitySet="TransType">
+                <ScalarProperty Name="TranstypeId" ColumnName="TranstypeId" />
+                <ScalarProperty Name="TransType1" ColumnName="TransType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetLastWeekTransaction" FunctionName="BankdbModel.Store.GetLastWeekTransaction">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BankdbModel.GetLastWeekTransaction_Result">
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountBalance" ColumnName="AccountBalance" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="TransAmount" ColumnName="TransAmount" />
+                <ScalarProperty Name="TransState" ColumnName="TransState" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetLasttwoWeekTransaction" FunctionName="BankdbModel.Store.GetLasttwoWeekTransaction">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BankdbModel.GetLasttwoWeekTransaction_Result">
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountBalance" ColumnName="AccountBalance" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="TransAmount" ColumnName="TransAmount" />
+                <ScalarProperty Name="TransState" ColumnName="TransState" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetLastMonthTransaction" FunctionName="BankdbModel.Store.GetLastMonthTransaction">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BankdbModel.GetLastMonthTransaction_Result">
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountBalance" ColumnName="AccountBalance" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="TransAmount" ColumnName="TransAmount" />
+                <ScalarProperty Name="TransState" ColumnName="TransState" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetcustomdateTransaction" FunctionName="BankdbModel.Store.GetcustomdateTransaction">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BankdbModel.GetcustomdateTransaction_Result">
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountBalance" ColumnName="AccountBalance" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="TransAmount" ColumnName="TransAmount" />
+                <ScalarProperty Name="TransState" ColumnName="TransState" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetLastFourWeekTransaction" FunctionName="BankdbModel.Store.GetLastFourWeekTransaction">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BankdbModel.GetLastFourWeekTransaction_Result">
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountBalance" ColumnName="AccountBalance" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="TransAmount" ColumnName="TransAmount" />
+                <ScalarProperty Name="TransState" ColumnName="TransState" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getAllTransaction" FunctionName="BankdbModel.Store.getAllTransaction">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BankdbModel.getAllTransaction_Result">
+                <ScalarProperty Name="atmaccId" ColumnName="atmaccId" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountBalance" ColumnName="AccountBalance" />
+                <ScalarProperty Name="AccTypeId" ColumnName="AccTypeId" />
+                <ScalarProperty Name="AccUserId" ColumnName="AccUserId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAllTranaction1" FunctionName="BankdbModel.Store.GetAllTranaction1">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BankdbModel.GetAllTranaction1_Result">
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountBalance" ColumnName="AccountBalance" />
+                <ScalarProperty Name="TransType" ColumnName="TransType" />
+                <ScalarProperty Name="TransDate" ColumnName="TransDate" />
+                <ScalarProperty Name="TransAmount" ColumnName="TransAmount" />
+                <ScalarProperty Name="TransState" ColumnName="TransState" />
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

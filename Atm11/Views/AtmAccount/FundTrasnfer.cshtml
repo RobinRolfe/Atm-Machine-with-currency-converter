@@ -1,0 +1,122 @@
+﻿@model Atm11.AtmAccount
+
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+
+<script> @*START OF THE JQUERY CODE*@
+
+
+    $(document).ready(function () {
+
+        // THIS FILLS DROPDOWNLIST FOR THE SOURCE ACCOUNT FROM THE 'FILLDROPDOWNLISTSOURCE' METHOD IN THE CONTROLLER
+        $.ajax({
+            type: "get",
+            url: "/AtmAccount/fillDropdownlistSource",
+            success:function(data)
+            {
+                $("#drpsourceAccountlist").html(data);
+            }
+
+        });
+
+       
+        // THIS FILLS DROPDOWNLIST FOR THE TARGET ACCOUNT FROM THE 'FILLDROPDOWNLISTSOURCE' METHOD IN THE CONTROLLER
+        $.ajax({
+            type: "get",
+            url: "/AtmAccount/fillDropdownlistTarget",
+            success: function (data) {
+                $("#drpTargetAccountlist").html(data);
+            }
+
+        });
+
+
+        ////FOR VIEWING ACCOUNTS ON THE TRANSFER PAGE
+        $.ajax({
+            type: "get",
+            url: "/AtmAccount/Index",
+            success: function (data) {
+                $("#accsView").html(data);
+            }
+        });
+        
+        
+        //FUND TRANSFER CLICK EVENT 
+
+        $("#btntransferfund").click(function () {
+            //DECLARING AND ASSIGNING VARIBLES ACCORDING TO THE USERS INPUT
+            var Sourceaccount=$("#drpsourceAccountlist").val();
+            var TargetAccount = $("#drpTargetAccountlist").val();
+            var amount = $("#txtamount").val();
+           
+
+                        if (amount > 0)
+                        {
+                            ////THIS CALLS THE 'FUNDTRASNFER' METHOD    
+                            $.ajax({
+                                type: "post",
+                                url: "/AtmAccount/FundTrasnfer",
+                                data: { saccount: Sourceaccount, daccount: TargetAccount, m: amount },
+                                success: function (data)
+                                
+                                {
+                                    window.location.href = "FundTrasnfer";
+                                    if (data) {
+                                        alert(data);
+                                    }
+                                    else {
+                                       
+                                        window.location.href = "FundTrasnfer";
+                                    }
+                                }
+
+                            })
+
+                        }
+                        
+                        else
+                        {
+                            alert("Amount must be greater than 0 !!!!!!!!!!");
+                        }
+ 
+        });
+
+    });
+
+</script> @*End of the jquery code*@
+
+
+
+<br />
+
+<table class='table' id="accsView" > @*Table to view the current users accounts*@
+    
+</table>
+
+   <br />
+   <h2>FundTrasnfer</h2>
+   <br />
+
+    <select id="drpsourceAccountlist"> @*User selects the source account number*@
+        
+    </select>
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    Target Account:
+    
+    <select id="drpTargetAccountlist"> @*User selects the target account number*@
+    
+
+
+    </select>
+    <br />
+    <br />
+    Amount :
+    <input type="text" id="txtamount" /> @*Input by the user and passed up to the ajax*@
+    <br />
+    <br />
+    <button id="btntransferfund" class="btn btn-info">Fund Transfer</button> @*Calls the 'fundTransfer' method if it passes the if statements conditions*@
+
+
+       

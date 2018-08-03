@@ -1,0 +1,213 @@
+﻿@model Atm11.AtmAccount
+@{
+    //ViewBag.Title = "Manageaccount";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<h1>Withdraw Cash In other currencies</h1>
+
+<br />
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#txtdw").prop('disabled', false);
+
+        //CLICK EVENT FOR THE DEPOSIT
+        $("#btndeposit").click(function () {
+
+            var currentbl = $("#accountbl").val();
+            var acctypeid = $("#acctypeId").val();
+            var damount = $("#txtdw").val();
+            var atmid = $("#atmid").val();
+            var accno = $("#accno").val();
+            if(damount>0)
+            {
+
+                $.ajax({
+
+                    type: "post",
+                    url: "/AtmAccount/GetDeposit",
+                    data: { cbal: currentbl, amount: damount, ano: accno, aid: atmid, atypeid: acctypeid },
+                    success:function(data)
+                    {
+                        //$("#msg").html(data);
+                        alert(data);
+
+                        window.location.href = "/atmaccount/Manageaccount/"+atmid;
+                    }
+
+
+                });
+
+            }
+            else
+            {
+                //$("#msg").html("Deposit amount must be greater than 0.");
+                alert("Deposit amount must be greater than 0.");
+            }
+
+        });
+
+        ////--------------------------------------------------------------------------------------------------------------////
+
+        //////////////////////////*****currency dropdown
+        $.ajax({
+            type: "get",
+            url: "/Currency/drpCurrencyCountryList",
+            success: function (data) {
+                $("#drpCurrencyList").html(data);
+            }
+
+        });
+
+        /////////////////////////******currency dropdown
+
+
+
+
+        //CLICK EVENT FOR THE WITHDRAWL
+        $("#btnwithdraw").click(function () {
+
+
+            //DECLARING AND ASSIGNING VARIABLES
+            var currentbl = $("#accountbl").val();
+            var acctypeid = $("#acctypeId").val();
+            var Wamount = $("#txtdw").val();
+            var atmid = $("#atmid").val();
+            var accno = $("#accno").val();
+            var ConCurrency = $("#drpCurrencyList").val();
+            var ConCurrencyName = $("#drpCurrencyList").find('option:selected').text();
+            //CHECKING THE AMOUNT IS GREATER THAN ZERO
+            if (Wamount > 0)
+            {
+
+                $.ajax({
+
+                    type: "post",
+                    //CALLING THE WITHDRAW FUNCTION
+                    url: "/AtmAccount/GetCurrWithDraw",
+                    //PARAMETERS TO BE PASSED OVER
+                    data: { cbal: currentbl, amount: Wamount, ano: accno, aid: atmid, atypeid: acctypeid, currency: ConCurrency, currencyName: ConCurrencyName },
+                    success: function (data) {
+
+                        alert(data);
+
+
+                        window.location.href = "/atmaccount/GetCurrWithDraw/" + atmid;
+                    }
+
+
+                });
+
+
+
+
+            }
+            else
+            {
+                alert("Withdraw amount must be greater than 0.");
+
+                }
+
+
+
+        });
+
+        ////--------------------------------------------------------------------------------------------------------------////
+
+        //CLICK EVENT FOR THE FAST £100 WITHDRAWL
+        $("#btnfastwithdraw").click(function () {
+
+            $("#txtdw").attr("disabled", "disabled");
+
+
+
+
+            var currentbl = $("#accountbl").val();
+            var acctypeid = $("#acctypeId").val();
+            var Wamount = 100;
+            var atmid = $("#atmid").val();
+            var accno = $("#accno").val();
+            if (Wamount > 0) {
+
+                $.ajax({
+
+                    type: "post",
+                    url: "/AtmAccount/GetWithDraw",
+                    data: { cbal: currentbl, amount: Wamount, ano: accno, aid: atmid, atypeid: acctypeid },
+                    success: function (data) {
+
+                        alert(data);
+
+
+                        window.location.href = "/atmaccount/Manageaccount/" + atmid;
+                    }
+
+
+                });
+
+
+
+
+            }
+            else {
+                alert("Withdraw amount must be greater than 0.");
+
+            }
+
+
+
+
+
+        });
+
+    });
+
+</script>
+
+
+<h2></h2>
+
+<div class="form-horizontal" action="">
+
+    
+
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="accno">Account No:</label>
+        <div class="col-sm-10">
+            <input type="hidden" id="atmid" value="@Model.atmaccId" />
+            <input type="hidden" id="acctypeId" value="@Model.AccTypeId" />
+            <input type="text" class="form-control" id="accno" readonly value="@Model.AccountNumber">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="bl">Balance:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="accountbl" readonly value="@Model.AccountBalance">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="bl">Deposit/Withdraw:</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="txtdw">
+        </div>
+    </div>
+
+    &nbsp&nbsp&nbsp&nbsp
+    
+     
+        <select id="drpCurrencyList">
+            @*User selects the source account number*@
+
+        </select>
+    
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="button" id="btnwithdraw" class="btn btn-default">Withdraw</button>
+         </div>
+    </div>
+</div> 
+
